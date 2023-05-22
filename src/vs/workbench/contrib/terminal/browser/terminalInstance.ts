@@ -486,8 +486,13 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 				this.shellLaunchConfig.executable = defaultProfile.path;
 				this.shellLaunchConfig.args = defaultProfile.args;
 				// Only use default icon and color if they are undefined in the SLC
-				this.shellLaunchConfig.icon ??= defaultProfile.icon;
-				this.shellLaunchConfig.color ??= defaultProfile.color;
+				if (!this.shellLaunchConfig.isExtensionOwnedTerminal) {
+					this.shellLaunchConfig.icon = defaultProfile.icon;
+					this.shellLaunchConfig.color = defaultProfile.color;
+				} else {
+					this.shellLaunchConfig.icon ??= defaultProfile.icon;
+					this.shellLaunchConfig.color ??= defaultProfile.color;
+				}
 			}
 
 			await this._createProcess();
